@@ -26,6 +26,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     const campCollection = client.db("medicampDB").collection("camps");
+    const userCollection = client.db("medicampDB").collection("users");
     const participantCollection = client
       .db("medicampDB")
       .collection("participants");
@@ -51,11 +52,28 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/users", async (req, res) => {
+      const result = await userCollection.find().toArray();
+      res.send(result);
+    });
+
     //===========ALL POST APIs ================================================
     app.post("/participants", async (req, res) => {
       const newParticipant = req.body;
-      console.log(newParticipant);
+      // console.log(newParticipant);
       const result = await participantCollection.insertOne(newParticipant);
+      res.send(result);
+    });
+    app.post("/users", async (req, res) => {
+      const newUser = req.body;
+      console.log(newUser);
+      const result = await userCollection.insertOne(newUser);
+      res.send(result);
+    });
+    app.post("/camps", async (req, res) => {
+      const newCamp = req.body;
+      console.log(newCamp);
+      const result = await campCollection.insertOne(newCamp);
       res.send(result);
     });
 
@@ -81,12 +99,19 @@ async function run() {
       const result = await campCollection.updateOne(filter, camp, options);
       res.send(result);
     });
-
-    // Send a ping to confirm a successful connection
-    // await client.db("admin").command({ ping: 1 });
-    // console.log(
-    //   "Pinged your deployment. You successfully connected to MongoDB!"
-    // );
+    // =======================ALL PATCH APIS=============================
+    app.patch("/users/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const updatedUser = {
+        $set: {
+          role: "Admin",
+        },
+      };
+      const result = await userCollection.updateOne(filter, updatedUser);
+      res.send(result);
+    });
+    //==============ALL DELETE APIs======================================
   } finally {
   }
 }
