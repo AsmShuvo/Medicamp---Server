@@ -112,6 +112,12 @@ async function run() {
       res.send(result);
     });
     //==============ALL DELETE APIs======================================
+    app.delete("/camps/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await campCollection.deleteOne(query);
+      res.send(result);
+    });
   } finally {
   }
 }
