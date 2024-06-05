@@ -40,10 +40,10 @@ async function run() {
 
     app.get("/camp/:id", async (req, res) => {
       const id = req.params.id;
-      // console.log(id);
+      console.log(id);
       const query = { _id: new ObjectId(id) };
       const result = await campCollection.findOne(query);
-      console.log(result);
+      console.log("*", result);
       res.send(result);
     });
 
@@ -80,6 +80,28 @@ async function run() {
     // =========ALL PUT APIs=======================================================
     app.put("/participants/:id", async (req, res) => {
       const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updatedCamp = req.body;
+      console.log(updatedCamp);
+      const camp = {
+        $set: {
+          name: updatedCamp.name,
+          image: updatedCamp.image,
+          fees: updatedCamp.fees,
+          date_time: updatedCamp.date_time,
+          location: updatedCamp.location,
+          healthcare_professional: updatedCamp.healthcare_professional,
+          participant_count: updatedCamp.participant_count,
+          description: updatedCamp.description,
+        },
+      };
+      const result = await campCollection.updateOne(filter, camp, options);
+      res.send(result);
+    });
+    app.put("/camps/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
       const filter = { _id: new ObjectId(id) };
       const options = { upsert: true }; // if no, then create
       const updatedCamp = req.body;
