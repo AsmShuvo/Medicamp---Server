@@ -11,10 +11,7 @@ app.use(morgan("dev"));
 const port = process.env.PORT || 3000;
 
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ezfvwv5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
-// console.log(uri);
-
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ezfvwv5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`; 
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -23,9 +20,7 @@ const client = new MongoClient(uri, {
   },
 });
 async function run() {
-  try {
-    // Connect the client to the server	(optional starting in v4.7)
-    // await client.connect();
+  try { 
     const campCollection = client.db("medicampDB").collection("camps");
     const paymentCollection = client.db("medicampDB").collection("payments");
     const userCollection = client.db("medicampDB").collection("users");
