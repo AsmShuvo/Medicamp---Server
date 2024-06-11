@@ -26,7 +26,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
     const campCollection = client.db("medicampDB").collection("camps");
     const paymentCollection = client.db("medicampDB").collection("payments");
     const userCollection = client.db("medicampDB").collection("users");
@@ -57,6 +57,10 @@ async function run() {
 
     app.get("/users", async (req, res) => {
       const result = await userCollection.find().toArray();
+      res.send(result);
+    });
+    app.get("/payments", async (req, res) => {
+      const result = await paymentCollection.find().toArray();
       res.send(result);
     });
     app.get("/payments/:id", async (req, res) => {
@@ -169,6 +173,25 @@ async function run() {
         },
       };
       const result = await userCollection.updateOne(filter, updatedUser);
+      res.send(result);
+    });
+    app.patch("/payments/:id/:email/:confirmation", async (req, res) => {
+      const id = req.params.id;
+      const email = req.params.email;
+      const confirmation = req.params.confirmation;
+      console.log(id);
+      console.log("#", email);
+      const filter = { _id: new ObjectId(id) };
+      const updatedCampStatus = {
+        $set: {
+          status: confirmation,
+        },
+      };
+      console.log(updatedCampStatus);
+      const result = await paymentCollection.updateOne(
+        filter,
+        updatedCampStatus
+      );
       res.send(result);
     });
     //==============ALL DELETE APIs======================================
