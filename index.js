@@ -6,8 +6,7 @@ require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 app.use(cors());
-app.use(express.json());
-// Use morgan to log requests to the console
+app.use(express.json()); 
 app.use(morgan("dev"));
 const port = process.env.PORT || 3000;
 
