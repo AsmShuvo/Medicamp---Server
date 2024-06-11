@@ -6,12 +6,12 @@ require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 app.use(cors());
-app.use(express.json()); 
+app.use(express.json());
 app.use(morgan("dev"));
 const port = process.env.PORT || 3000;
 
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ezfvwv5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`; 
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.ezfvwv5.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -20,7 +20,7 @@ const client = new MongoClient(uri, {
   },
 });
 async function run() {
-  try { 
+  try {
     const campCollection = client.db("medicampDB").collection("camps");
     const paymentCollection = client.db("medicampDB").collection("payments");
     const userCollection = client.db("medicampDB").collection("users");
@@ -36,11 +36,9 @@ async function run() {
     });
 
     app.get("/camp/:id", async (req, res) => {
-      const id = req.params.id;
-      // console.log(id);
+      const id = req.params.id; 
       const query = { _id: new ObjectId(id) };
-      const result = await campCollection.findOne(query);
-      // console.log("*", result);
+      const result = await campCollection.findOne(query); 
       res.send(result);
     });
 
@@ -58,30 +56,24 @@ async function run() {
       res.send(result);
     });
     app.get("/payments/:id", async (req, res) => {
-      const query = { email: req.params.id };
-      // console.log(query);
-      // console.log(req.params.id);
-      const result = await paymentCollection.find(query).toArray();
-      // console.log(result);
+      const query = { email: req.params.id }; 
+      const result = await paymentCollection.find(query).toArray(); 
       res.send(result);
     });
 
     //===========ALL POST APIs ================================================
     app.post("/participants", async (req, res) => {
-      const newParticipant = req.body;
-      // console.log(newParticipant);
+      const newParticipant = req.body; 
       const result = await participantCollection.insertOne(newParticipant);
       res.send(result);
     });
     app.post("/users", async (req, res) => {
-      const newUser = req.body;
-      // console.log(newUser);
+      const newUser = req.body; 
       const result = await userCollection.insertOne(newUser);
       res.send(result);
     });
     app.post("/camps", async (req, res) => {
-      const newCamp = req.body;
-      // console.log(newCamp);
+      const newCamp = req.body; 
       const result = await campCollection.insertOne(newCamp);
       res.send(result);
     });
@@ -101,9 +93,7 @@ async function run() {
 
     app.post("/payments", async (req, res) => {
       const payment = req.body;
-      const paymentResult = await paymentCollection.insertOne(payment);
-      // delete each item from cart
-      // console.log("Payment info", payment);
+      const paymentResult = await paymentCollection.insertOne(payment); 
       const query = {
         _id: {
           $in: payment.cartIds.map((id) => new ObjectId(id)),
@@ -118,8 +108,7 @@ async function run() {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
       const options = { upsert: true };
-      const updatedCamp = req.body;
-      // console.log(updatedCamp);
+      const updatedCamp = req.body; 
       const camp = {
         $set: {
           name: updatedCamp.name,
@@ -136,12 +125,10 @@ async function run() {
       res.send(result);
     });
     app.put("/camps/:id", async (req, res) => {
-      const id = req.params.id;
-      // console.log(id);
+      const id = req.params.id; 
       const filter = { _id: new ObjectId(id) };
-      const options = { upsert: true }; // if no, then create
-      const updatedCamp = req.body;
-      // console.log(updatedCamp);
+      const options = { upsert: true };  
+      const updatedCamp = req.body; 
       const camp = {
         $set: {
           name: updatedCamp.name,
