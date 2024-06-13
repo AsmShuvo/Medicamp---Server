@@ -36,9 +36,9 @@ async function run() {
     });
 
     app.get("/camp/:id", async (req, res) => {
-      const id = req.params.id; 
+      const id = req.params.id;
       const query = { _id: new ObjectId(id) };
-      const result = await campCollection.findOne(query); 
+      const result = await campCollection.findOne(query);
       res.send(result);
     });
 
@@ -56,24 +56,24 @@ async function run() {
       res.send(result);
     });
     app.get("/payments/:id", async (req, res) => {
-      const query = { email: req.params.id }; 
-      const result = await paymentCollection.find(query).toArray(); 
+      const query = { email: req.params.id };
+      const result = await paymentCollection.find(query).toArray();
       res.send(result);
     });
 
     //===========ALL POST APIs ================================================
     app.post("/participants", async (req, res) => {
-      const newParticipant = req.body; 
+      const newParticipant = req.body;
       const result = await participantCollection.insertOne(newParticipant);
       res.send(result);
     });
     app.post("/users", async (req, res) => {
-      const newUser = req.body; 
+      const newUser = req.body;
       const result = await userCollection.insertOne(newUser);
       res.send(result);
     });
     app.post("/camps", async (req, res) => {
-      const newCamp = req.body; 
+      const newCamp = req.body;
       const result = await campCollection.insertOne(newCamp);
       res.send(result);
     });
@@ -93,7 +93,7 @@ async function run() {
 
     app.post("/payments", async (req, res) => {
       const payment = req.body;
-      const paymentResult = await paymentCollection.insertOne(payment); 
+      const paymentResult = await paymentCollection.insertOne(payment);
       const query = {
         _id: {
           $in: payment.cartIds.map((id) => new ObjectId(id)),
@@ -108,7 +108,7 @@ async function run() {
       const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
       const options = { upsert: true };
-      const updatedCamp = req.body; 
+      const updatedCamp = req.body;
       const camp = {
         $set: {
           name: updatedCamp.name,
@@ -125,10 +125,10 @@ async function run() {
       res.send(result);
     });
     app.put("/camps/:id", async (req, res) => {
-      const id = req.params.id; 
+      const id = req.params.id;
       const filter = { _id: new ObjectId(id) };
-      const options = { upsert: true };  
-      const updatedCamp = req.body; 
+      const options = { upsert: true };
+      const updatedCamp = req.body;
       const camp = {
         $set: {
           name: updatedCamp.name,
