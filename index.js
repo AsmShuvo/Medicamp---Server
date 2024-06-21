@@ -24,6 +24,7 @@ async function run() {
     const campCollection = client.db("medicampDB").collection("camps");
     const paymentCollection = client.db("medicampDB").collection("payments");
     const userCollection = client.db("medicampDB").collection("users");
+    const reviewCollection = client.db("medicampDB").collection("reviews");
     const participantCollection = client
       .db("medicampDB")
       .collection("participants");
@@ -50,9 +51,14 @@ async function run() {
     app.get("/users", async (req, res) => {
       const result = await userCollection.find().toArray();
       res.send(result);
+      // clg
     });
     app.get("/payments", async (req, res) => {
       const result = await paymentCollection.find().toArray();
+      res.send(result);
+    });
+    app.get("/reviews", async (req, res) => {
+      const result = await reviewCollection.find().toArray();
       res.send(result);
     });
     app.get("/payments/:id", async (req, res) => {
@@ -75,6 +81,12 @@ async function run() {
     app.post("/camps", async (req, res) => {
       const newCamp = req.body;
       const result = await campCollection.insertOne(newCamp);
+      res.send(result);
+    });
+    app.post("/reviews", async (req, res) => {
+      const newReview = req.body;
+      console.log(newReview);
+      const result = await reviewCollection.insertOne(newReview);
       res.send(result);
     });
 
