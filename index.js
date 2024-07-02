@@ -50,8 +50,7 @@ async function run() {
 
     app.get("/users", async (req, res) => {
       const result = await userCollection.find().toArray();
-      res.send(result);
-      // clg
+      res.send(result); 
     });
     app.get("/payments", async (req, res) => {
       const result = await paymentCollection.find().toArray();
